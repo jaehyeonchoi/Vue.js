@@ -1,0 +1,65 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="http://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <title>끝말잇기</title>
+</head>
+<body>
+<!--컴포넌트는 인스턴스보다는 위에, 스크립트는 div#root보다는 아래에-->
+<div id="root">
+  <word-relay></word-relay><!--Vue 컴포넌트 사용(여러 개를 독립적으로 사용 가능)-->
+  <word-relay></word-relay>
+  <word-relay></word-relay>
+</div>
+<script>
+  Vue.component('word-relay', { //Vue 컴포넌트
+    //templete의 최상위 태그는 1개만 존재해야 함
+    template: `
+      <div>
+        <div>{{word}}</div>
+        <form v-on:submit="onSubmitForm">
+          <input type="text" ref="answer" v-model="value">
+          <button type="submit">입력!</button>
+        </form>
+        <div>{{result}}</div>
+      </div>
+    `,
+    // data:{ //컴포넌트에서는 data 객체 대신, data 객체를 반환하는 함수 형태로 만들어줘야 함(return) -> 각 컴포넌트마다 다른 data를 할당받을 수 있도록 분리
+    //   word: '오아시스',
+    //   result: '',
+    //   value: '',
+    // },
+    data() {
+      return {
+        word: '오아시스',
+        result: '',
+        value: '',
+      };
+    },
+    methods: {
+      onSubmitForm(e) {
+        e.preventDefault();
+        if(this.word[this.word.length - 1] === this.value[0]) {
+          this.result = '딩동댕';
+          this.word = this.value;
+          this.value = '';
+          this.$refs.answer.focus();
+        } else {
+          this.result = '땡';
+          this.value = '';
+          this.$refs.answer.focus();
+        }
+      },
+    },
+  })
+</script>
+<script>
+  const app = new Vue({ //Vue 인스턴스
+    el: "#root",
+  });
+</script>
+</body>
+</html>
