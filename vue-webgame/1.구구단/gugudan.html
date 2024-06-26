@@ -1,18 +1,47 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport">
-    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>구구단</title>
-    <script src="http://cdn,jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="http://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
     <div id="root">
-
+        <div>{{first}} 곱하기 {{second}}은(는)?</div><!--중괄호 두번({{}})으로 data 요소의 값을 가져와 출력 가능(보간법)-->
+        <form v-on:submit="onSubmitForm">
+            <input type="number" ref="answer" v-model="value"><!--v-model="value" : value의 값을 사용자의 입력에 따라 변경 / ref="answer" : 태그의 이름을 $refs.answer로 하여 Vue에서 접근 가능-->
+            <button type="submit">입력</button>
+        </form>
+        <div id="result">{{result}}</div>
     </div>
-    <script>
-
-    </script>
 </body>
+<script>
+    const app = new Vue({
+        el: "#root",
+        data: {
+            first: Math.ceil(Math.random() * 9),
+            second: Math.ceil(Math.random() * 9),
+            value: '',
+            result: '',
+        },
+        methods: {
+            onSubmitForm(e){
+                e.preventDefault(); //새로고침 방지(싱글페이지 애플리케이션이기 때문에 새로고침 되면 안됨)
+                if(this.first * this.second === parseInt(this.value)){
+                    this.result = '정답';
+                    this.first = Math.ceil(Math.random() * 9);
+                    this.second = Math.ceil(Math.random() * 9);
+                    this.value = '';
+                    this.$refs.answer.focus(); //ref="answer"로 설정해둔 태그에 접근 -> Focus 설정
+                } else {
+                    this.result = '땡';
+                    this.value = '';
+                    this.$refs.answer.focus(); //ref="answer"로 설정해둔 태그에 접근 -> Focus 설정
+                }
+            }
+        },
+    });
+</script>
 </html>
