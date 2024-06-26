@@ -1,0 +1,29 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>좋아요</title>
+    <script src="http://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script><!--Vue 사용 가능하게 함-->
+</head>
+<body>
+    <div id="root">
+        <div v-if="liked">좋아요 눌렀음</div><!--v-if="liked" : 조건문(liked가 true이면 화면에 출력됨, 형제+인접 태그여야 if-else 가능)-->
+        <button v-else v-on:click="onClickButton">Like</button><!--v-on:click="onClickButton" : click했을 때, onClickButton() 호출-->
+    </div>
+</body>
+<script>
+    const app = new Vue({
+        el: '#root', //마운팅 포인트 결정
+        data: { //변수 같은 개념
+            liked: false,
+        },
+        methods: { //메소드
+            onClickButton(){
+                this.liked = true; //this는 data를 가리킴
+            },
+        },
+    });
+</script>
+</html>
