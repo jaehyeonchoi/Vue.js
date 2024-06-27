@@ -1,0 +1,68 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="http://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <title>끝말잇기</title>
+</head>
+<body>
+<!--컴포넌트는 인스턴스보다는 위에, 스크립트는 div#root보다는 아래에-->
+<div id="root">
+  <word-relay start-word="오아시스"></word-relay><!--props : 동일한 종류의 컴포넌트에 속성을 부여(여기서는 startWord라는 속성을 부여해서 시작단어를 다르게 설정)-->
+  <word-relay start-word="바다"></word-relay>
+  <word-relay start-word="초원"></word-relay><!--HTML에서 props명을 적을 때는 HTML 속성 표기법처럼 kebab case로 쓰는 것을 권장-->
+</div>
+<script>
+  Vue.component('word-relay', { //Vue 컴포넌트
+    //templete의 최상위 태그는 1개만 존재해야 함
+    template: `
+      <div>
+        <div>{{word}}</div>
+        <form v-on:submit="onSubmitForm">
+          <input type="text" ref="answer" v-model="value">
+          <button type="submit">입력!</button>
+        </form>
+        <div>{{result}}</div>
+      </div>
+    `,
+
+    props: ['startWord'], //props(속성) 종류 정의
+
+    // data:{ //컴포넌트에서는 data 객체 대신, data 객체를 반환하는 함수 형태로 만들어줘야 함(return) -> 각 컴포넌트마다 다른 data를 할당받을 수 있도록 분리
+    //   word: '오아시스',
+    //   result: '',
+    //   value: '',
+    // },
+    data() {
+      return {
+        word: this.startWord, //props(속성) startWord의 값을 가져와 시작단어로 사용
+        result: '',
+        value: '',
+      };
+    },
+    methods: {
+      onSubmitForm(e) {
+        e.preventDefault();
+        if(this.word[this.word.length - 1] === this.value[0]) {
+          this.result = '딩동댕';
+          this.word = this.value;
+          this.value = '';
+          this.$refs.answer.focus();
+        } else {
+          this.result = '땡';
+          this.value = '';
+          this.$refs.answer.focus();
+        }
+      },
+    },
+  })
+</script>
+<script>
+  const app = new Vue({ //Vue 인스턴스
+    el: "#root",
+  });
+</script>
+</body>
+</html>
